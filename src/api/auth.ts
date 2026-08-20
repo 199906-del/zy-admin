@@ -1,5 +1,5 @@
 // api/auth.ts
-import request from "@/utils/request";
+import request, { request as Request} from "@/utils/request";
 
 // 登录请求参数
 export interface LoginParams {
@@ -29,9 +29,17 @@ export interface UserInfo {
   permissions: string[]
 }
 
-// 登录
+// 登录（快捷写法，指定接口为post）
+// export const login = ( data: LoginParams ) => {
+//   return request.post<LoginResult>('/auth/login', data)
+// }
+// 通用写法，动态method
 export const login = ( data: LoginParams ) => {
-  return request.post<LoginResult>('/auth/login', data)
+  return Request<LoginResult>({
+    url: '/auth/login',
+    method: 'POST',
+    data
+  })
 }
 
 // 获取用户信息

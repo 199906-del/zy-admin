@@ -176,8 +176,10 @@ class Request {
 }
 
 // 导出单例
-
-export default new Request()
+const requestInstance  = new Request()
+export default requestInstance
 
 // 也可以导出实例方法
-export const { get, post, put, delete: del, upload, request } = new Request();
+export const { get, post, put, delete: del, upload } = requestInstance;
+// 单独导出request通用方法
+export const request =  requestInstance.request.bind(requestInstance)
