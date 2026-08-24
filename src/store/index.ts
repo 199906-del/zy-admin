@@ -7,3 +7,5 @@ export default pinia
 
 // 导出所有模块
 export * from './modules/user'
+export * from './modules/setting'
+export * from './modules/routerList'

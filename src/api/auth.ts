@@ -1,6 +1,16 @@
 // api/auth.ts
 import request, { request as Request} from "@/utils/request";
 
+// 路由接口定义
+interface Route {
+  id: number,
+  name: string,
+  route: string,
+  icon: string,
+  resourceType: string,
+  children: Array<{ id: number, name: string, icon: string, route: string, resourceType: string}>
+}
+
 // 登录请求参数
 export interface LoginParams {
   username: string,
@@ -14,7 +24,9 @@ export interface LoginResult {
   username: string,
   nickname: string,
   avatar?: string,
-  roles: string[]
+  roles: string[],
+  resourceType: string,
+  resourceList: Route[]
 }
 
 // 用户信息 
