@@ -20,6 +20,7 @@ import { ref, reactive } from 'vue'
 import { login } from '@/api/auth';
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
+import { useRouterStore } from '@/store/modules/routerList'
 import { message } from 'ant-design-vue';
 import type { FormInstance, Rule } from 'ant-design-vue/es/form'
 interface userInfo {
@@ -32,8 +33,9 @@ const loginForm: userInfo = reactive({
   password: ''
 })
 
-const router = useRouter()
 const userStore = useUserStore()
+const routerStore = useRouterStore()
+const router = useRouter()
 
 // 获取表单组件实例
 const loginFormRef = ref<FormInstance>()
@@ -74,10 +76,12 @@ const handleLogin = async () => {
     avatar: res.avatar ?? '',
     roles: res.roles,
   })
+  // 保存路由到store
+  routerStore.saveRouter(res.resourceList)
 
   message.success('登陆成功')
   // 跳转到重定向页面或首页
-  router.push('/home')
+  router.push('/')
  } catch (e: any) {
   // 表单验证失败或登陆失败
   if (e?.errorFields) {

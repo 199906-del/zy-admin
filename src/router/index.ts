@@ -7,6 +7,8 @@ import type { RouteRecordRaw } from 'vue-router'  // 👈 加上 type 关键字
 // 登陆时的vue组件
 import LoginView from '../views/login/index.vue'
 import { useUserStore } from '@/store/modules/user'
+import { useRouterStore } from '@/store/modules/routerList.ts'
+import Layout from '../views/layout/index.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -20,12 +22,39 @@ const routes: RouteRecordRaw[] = [
   },
   {
     // 其他页面懒加载
-    path: '/home',
+    path: '/',
     name: 'Home',
-    component: () => import('../views/layout/index.vue'),
+    redirect: '/sysManage',
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/sysManage',
+    name: 'sysManage',
+    component: Layout,
+    meta: {
+      title: '系统管理'
+    },
+    redirect: '/sysManage/userManage',
+    children: [
+      {
+        path: '/sysManage/userManage',
+        name: 'userManage',
+        component: () => import('@/views/sys/UserManage/index.vue'),
+        meta: {
+          title: '用户管理'
+        }
+      },
+      {
+        path: '/sysManage/menuManage',
+        name: 'menuManage',
+        component: () => import('@/views/sys/menuManage/index.vue'),
+        meta: {
+          title: '菜单管理'
+        }
+      }
+    ]
   }
 ]
 
@@ -39,6 +68,8 @@ const router = createRouter({
 router.beforeEach(async (to, _from, next) => {
   const token = localStorage.getItem('token')
   const userStore = useUserStore()
+  const routerStore = useRouterStore()
+  console.log("token",token)
 
   // 如果页面需要认证
   if (to.meta.requiresAuth !== false) {
@@ -53,18 +84,27 @@ router.beforeEach(async (to, _from, next) => {
 
     // 如果已登录但没有用户信息，尝试获取
     if (!userStore.userInfo) {
-      try {
-        await userStore.fetchUserInfo()
-        next()
-      } catch {
-        // 获取信息失败，清除token跳转登录
-        userStore.clearUserInfo()
-        next({
-          path: '/login',
-          query: { redirect: to.fullPath }
-        })
+      userStore.restoreUserInfo() // 从localStorage中恢复
+
+      // 如果回复后还为空，则重新获取用户信息
+      if (!userStore.userInfo) {
+        try {
+          await userStore.fetchUserInfo()
+          next()
+        } catch {
+          // 获取信息失败，清除token跳转登录
+          userStore.clearUserInfo()
+          next({
+            path: '/login',
+            query: { redirect: to.fullPath }
+          })
+        }
+        return
       }
-      return
+      
+    }
+    if (!routerStore.routerList.length) {
+      routerStore.getRouter()
     }
     // 已经登录并且有用户信息
     next()

@@ -1,5 +1,6 @@
 // mock/index.ts
 import Mock from 'mockjs'
+import { adminRouterLists, userRouterLists } from './modules/resourceList'
 
 // 设置延迟
 Mock.setup({
@@ -24,7 +25,8 @@ Mock.mock('/api/auth/login', 'post', (options: any) => {
         nickname: '超级管理员',
         // 使用 DiceBear Avatar API 生成一个随机头像 SVG 图片
         avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Mock.mock('@name')}`,
-        roles: ['admin']
+        roles: ['admin'],
+        resourceList: adminRouterLists
       },
       msg: '登陆成功',
       success: true
@@ -38,7 +40,8 @@ Mock.mock('/api/auth/login', 'post', (options: any) => {
          username: 'user',
          nickname: '普通用户',
          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Mock.mock('@name')}`,
-         roles: ['user']
+         roles: ['user'],
+         resourceList: userRouterLists
       },
       msg: '登陆成功',
       success: true
