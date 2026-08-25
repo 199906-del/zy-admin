@@ -4,7 +4,7 @@ const adminRouterLists = [
     name: '系统管理',
     route: '/sysManage',
     resourceType: 'folder',
-    icon: 'manage',
+    icon: 'setting',
     children: [
       {
         id: 11,
@@ -28,7 +28,7 @@ const userRouterLists = [
     name: '系统管理',
     route: '/sysManage',
     resourceType: 'folder',
-    icon: 'manage',
+    icon: 'setting',
     children: [
       {
         id: 11,

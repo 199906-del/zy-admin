@@ -28,6 +28,7 @@ declare module 'vue' {
     MenuUnfoldOutlined: typeof import('@ant-design/icons-vue')['MenuUnfoldOutlined']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SvgIconInsex: typeof import('./src/components/SvgIcon/SvgIconInsex.vue')['default']
     UploadOutlined: typeof import('@ant-design/icons-vue')['UploadOutlined']
     UserOutlined: typeof import('@ant-design/icons-vue')['UserOutlined']
     VideoCameraOutlined: typeof import('@ant-design/icons-vue')['VideoCameraOutlined']
