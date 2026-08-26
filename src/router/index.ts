@@ -8,7 +8,9 @@ import type { RouteRecordRaw } from 'vue-router'  // 👈 加上 type 关键字
 import LoginView from '../views/login/index.vue'
 import { useUserStore } from '@/store/modules/user'
 import { useRouterStore } from '@/store/modules/routerList.ts'
-import Layout from '../views/layout/index.vue'
+// import Layout from '../views/layout/index.vue'
+// 动态导入路由懒加载
+const Layout = () => import('../views/layout/index.vue')
 
 const routes: RouteRecordRaw[] = [
   {

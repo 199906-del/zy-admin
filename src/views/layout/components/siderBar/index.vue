@@ -54,19 +54,6 @@ watch(
   { immediate: true }
 )
 
-// function extractAllRoutes(routes: Route[]){
-//     const result: string[] = []
-//     routes.forEach(r => {
-//       //  添加当前route
-//       result.push(r.route)
-//       // 如果有子路由，递归提取
-//       if (r.children && r.children.length) {
-//         result.push(...extractAllRoutes(r.children))
-//       }
-//     })
-//     return result
-//   }
-
 </script>
 
 <style lang="scss" scoped>

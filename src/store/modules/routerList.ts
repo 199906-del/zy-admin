@@ -5,9 +5,9 @@ export const useRouterStore = defineStore('router',() => {
     id: number,
     name: string,
     route: string,
-    icon: string,
+    icon?: string,
     resourceType: string,
-    children: Array<{ id: number, name: string, icon: string, route: string, resourceType: string}>
+    children: Array<{ id: number, name: string, icon?: string, route: string, resourceType: string}>
   }
   // state
   // 路由列表

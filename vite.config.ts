@@ -6,6 +6,8 @@ import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 // 引入mock
 import { viteMockServe } from 'vite-plugin-mock'
+// 引入svg图标插件createSvgIconsPlugin
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 import path from 'path'
 import { loadEnv } from 'vite'
@@ -33,6 +35,17 @@ export default defineConfig(({ mode }) => {
         // enable: true, // 是否启用mock
         enable: env.VITE_MOCK === 'true', // 根据env中的配置选择是否开启mock
         logger: true // 控制台显示请求日志
+      }),
+      // svg图标配置
+      createSvgIconsPlugin({
+        // 指定SVG图标存放目录
+        iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
+        // 图标ID格式
+        symbolId: 'icon-[name]',
+        // 自定义注入位置
+        inject: 'body-first',
+        // 自定义SVG属性
+        customDomId: '__svg__icons__dom__'
       })
     ],
     resolve: {
