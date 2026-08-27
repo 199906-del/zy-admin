@@ -7,13 +7,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineComponent, computed, watch} from 'vue'
+import { ref, computed, watch} from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouterStore } from '@/store/modules/routerList'
 import MenuItem from './menuItem.vue'
 
-defineComponent({
-  name: 'menu'
+defineOptions({
+  name: 'menu-scrollbar'
 })
 
 const route = useRoute()

@@ -34,11 +34,18 @@ export const useRouterStore = defineStore('router',() => {
   function getRouter() {
     restoreRouter()
   }
+  function clearRouter() {
+    routerList.value = []
+    localStorage.removeItem('resource')
+    sessionStorage.removeItem('resource')
+  }
+
   restoreRouter()
   return {
     routerList,
     saveRouter,
     getRouter,
-    restoreRouter
+    restoreRouter,
+    clearRouter
   }
 })

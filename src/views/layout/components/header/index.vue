@@ -6,13 +6,15 @@
 </template>
 
 <script setup lang="ts">
-import HeaderLeft from './components/headerLeft.vue'
-import HeaderRight from './components/headerRight.vue'
+import HeaderLeft from './headerLeft.vue'
+import HeaderRight from './headerRight.vue'
 
 </script>
 
 <style scoped>
 .container {
   display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
 }
 </style>

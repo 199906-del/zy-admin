@@ -8,6 +8,7 @@ interface UserInfo {
   nickname: string,
   avatar: string,
   roles: string[],
+  email?:string,
   permissions?: string[]
 }
 
@@ -32,6 +33,7 @@ export const useUserStore = defineStore('user', () => {
         nickname: info.nickname,
         avatar: info.avatar,
         roles: info.roles,
+        email: info.email,
         permissions: info.permissions,
       }
       localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
