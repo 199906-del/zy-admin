@@ -25,6 +25,7 @@ export interface LoginResult {
   nickname: string,
   avatar?: string,
   roles: string[],
+  email?: string,
   resourceType: string,
   resourceList: Route[]
 }

@@ -72,6 +72,7 @@ const handleLogin = async () => {
   userStore.setUserInfo({
     userId: res.userId,
     username: res.username,
+    email: res.email,
     nickname: res.nickname,
     avatar: res.avatar ?? '',
     roles: res.roles,

@@ -23,13 +23,13 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, computed } from 'vue'
+import { computed } from 'vue'
 import SiderBar from './components/siderBar/index.vue'
 import Header from './components/header/index.vue'
 import { useSettingStore } from '@/store/modules/setting.ts'
 import defaultSetting from '@/commom/defaultSetting.ts'
 
-defineComponent({
+defineOptions({
   name: 'siderBar'
 })
 
