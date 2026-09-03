@@ -1,17 +1,17 @@
 <template>
-  <template v-if="menuItem.children && menuItem.children.length">
-    <a-sub-menu :key="menuItem.route || String(menuItem.id)">
+  <template v-if="menuItem.children && menuItem.children.length && isHidden(menuItem) ">
+    <a-sub-menu :key="menuKey(menuItem)">
       <template #title>
         <span class="menu-title-wrapper">
-          <SvgIcon v-if="menuItem.icon" :name="menuItem.icon" size="18px"></SvgIcon>
-          <span v-if="!collapsed">{{ menuItem.name }}</span>
+          <SvgIcon v-if="menuItem.meta?.icon" :name="menuItem.meta?.icon" size="18px"></SvgIcon>
+          <span v-if="!collapsed">{{ menuItem.meta?.title }}</span>
         </span> 
       </template>
-      <MenuItem v-for="child in menuItem.children" :key="child.route || child.id" :menu-item="child"></MenuItem>
+      <MenuItem v-for="child in menuItem.children" :key="menuKey(child)" :menu-item="child"></MenuItem>
     </a-sub-menu>
   </template>
-  <a-menu-item v-else :key="menuItem.route" @click="handleMenuClick(menuItem.route)">
-    {{ menuItem.name }}
+  <a-menu-item v-else-if="isHidden(menuItem)" :key="menuKey(menuItem)" @click="handleMenuClick(menuKey(menuItem))">
+    {{ menuItem.meta?.title }}
   </a-menu-item>
 </template>
 
@@ -19,20 +19,13 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSettingStore } from '@/store/modules/setting'
+import type { RouteConfig } from '@/api/types'
 defineOptions({
   name: 'menuItem'
 })
 
-interface MenuItem {
-  id: number
-  name: string
-  route: string
-  resourceType: string
-  icon?: string,
-  children?: MenuItem[]
-}
 defineProps<{
-  menuItem: MenuItem
+  menuItem: RouteConfig
 }>()
 
 const router = useRouter()
@@ -42,8 +35,22 @@ const collapsed = computed(() => {
   return settingStore.menuCollapse
 })
 
-function handleMenuClick(route: string) {
-  router.push(route)
+function menuKey(menuItem: RouteConfig) {
+  return menuItem.path || menuItem.route || String(menuItem.id)
+}
+
+function isHidden(menuItem: RouteConfig) {
+  if (menuItem.meta?.hidden) {
+    return false
+  } else {
+    return true
+  }
+}
+
+function handleMenuClick(route: string | undefined) {
+  if (route) {
+    router.push(route)
+  }
 }
 </script>
 

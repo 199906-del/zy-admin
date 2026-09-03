@@ -21,8 +21,8 @@ const app = createApp(App)
 // 全局注册SVG图标组件
 app.component('SvgIcon', SvgIcon)
 
-app.use(router)
 app.use(pinia)
+app.use(router)
 
 app.mount('#app')
 

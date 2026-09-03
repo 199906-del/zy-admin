@@ -62,11 +62,18 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const resetToken = () => {
+    // 重置token
+    // 清除用户相关消息
+    clearUserInfo()
+  }
+
   return {
     userInfo,
     setUserInfo,
     fetchUserInfo,
     clearUserInfo,
-    restoreUserInfo
+    restoreUserInfo,
+    resetToken
   }
 })

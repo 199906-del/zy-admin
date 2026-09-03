@@ -10,13 +10,15 @@ const adminRouterLists = [
         id: 11,
         name: '用户管理',
         route: '/sysManage/userManage',
-        resourceType: 'menu'
+        resourceType: 'menu',
+        orderStr: 2
       },
       {
         id: 11,
         name: '菜单管理',
         resourceType: 'menu',
-        route: '/sysManage/menuManage'
+        route: '/sysManage/menuManage',
+        orderStr: 1
       }
     ]
   }

@@ -1,77 +1,24 @@
 // src/router/index.ts
 // createRouter创建路由实例的函数，createWebHistory使用HTML5 History模式（URL不带 # ）
-import { createRouter, createWebHistory } from 'vue-router'
-// type { RouteRecordRaw }TypeScript类型，用于类型检查（type关键字表示这是纯类型，打包时会被移除）
-// RouteRecordRaw是Vue Router源码中定义的一个TypeScript类型/接口，规定了每个路由配置必须包含哪些字段、可选哪些字段、每个字段是什么类型
-import type { RouteRecordRaw } from 'vue-router'  // 👈 加上 type 关键字
-// 登陆时的vue组件
-import LoginView from '../views/login/index.vue'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
-import { useRouterStore } from '@/store/modules/routerList.ts'
 // import Layout from '../views/layout/index.vue'
-// 动态导入路由懒加载
-const Layout = () => import('../views/layout/index.vue')
-
-const routes: RouteRecordRaw[] = [
-  {
-    // 登录页用同步加载，因为是必须的
-    path: '/login',
-    name: 'Login',
-    component: LoginView,
-    meta: {
-      requiresAuth: false
-    }
-  },
-  {
-    // 其他页面懒加载
-    path: '/',
-    name: 'Home',
-    redirect: '/sysManage',
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/sysManage',
-    name: 'sysManage',
-    component: Layout,
-    meta: {
-      title: '系统管理'
-    },
-    redirect: '/sysManage/userManage',
-    children: [
-      {
-        path: '/sysManage/userManage',
-        name: 'userManage',
-        component: () => import('@/views/sys/UserManage/index.vue'),
-        meta: {
-          title: '用户管理'
-        }
-      },
-      {
-        path: '/sysManage/menuManage',
-        name: 'menuManage',
-        component: () => import('@/views/sys/menuManage/index.vue'),
-        meta: {
-          title: '菜单管理'
-        }
-      }
-    ]
-  }
-]
+import { constantRoutes } from './routers'
+import { usePermissionStore } from '@/store/modules/permission'
 
 // 创建路由实例
 const router = createRouter({
   history: createWebHistory(), // 使用history模式
-  routes  // 传入路由表
+  routes: constantRoutes
 })
 
 // 路由守卫(to:目标路由对象,from: 来源路由对象,next()：控制跳转)
 router.beforeEach(async (to, _from, next) => {
   const token = localStorage.getItem('token')
   const userStore = useUserStore()
-  const routerStore = useRouterStore()
+  const permissionStore = usePermissionStore()
   console.log("token",token)
+  console.log("to",to)
 
   // 如果页面需要认证
   if (to.meta.requiresAuth !== false) {
@@ -83,16 +30,14 @@ router.beforeEach(async (to, _from, next) => {
       })
       return
     }
-
     // 如果已登录但没有用户信息，尝试获取
     if (!userStore.userInfo) {
       userStore.restoreUserInfo() // 从localStorage中恢复
 
-      // 如果回复后还为空，则重新获取用户信息
+      // 如果恢复后还为空，则重新获取用户信息
       if (!userStore.userInfo) {
         try {
           await userStore.fetchUserInfo()
-          next()
         } catch {
           // 获取信息失败，清除token跳转登录
           userStore.clearUserInfo()
@@ -100,13 +45,32 @@ router.beforeEach(async (to, _from, next) => {
             path: '/login',
             query: { redirect: to.fullPath }
           })
+          return
         }
-        return
       }
       
     }
-    if (!routerStore.routerList.length) {
-      routerStore.getRouter()
+    // permissionStore.routes是最终有权限的路由数组
+    if (!permissionStore.routes.length) {
+      // 路由合并（与后端返回的有权限的路由取交集）
+      try {
+        // routerStore.getRouter()
+        // 拿到后端resource
+        const resourceStr = localStorage.getItem('resource') || '[]'
+        const resource = JSON.parse(resourceStr)
+        if (resource && Array.isArray(resource) && resource.length) {
+          // 得到最终过滤后的路由
+          const accessRoutes = await permissionStore.generateRoutes(resource)
+          resetRouter(accessRoutes)
+          // 动态路由注册后重新匹配原始目标地址
+          next({ ...to, replace: true })
+          return
+        }
+      } catch (e) {
+        // 如果动态路由加载失败，重置token跳转登录页，并记住目标路径
+        userStore.resetToken()
+        next(`/login?redirect=${to.path}`)
+      }
     }
     // 已经登录并且有用户信息
     next()
@@ -121,6 +85,47 @@ router.beforeEach(async (to, _from, next) => {
   }
 })
 
+const dynamicRouteNames = new Set<string>()
+// 404 通配符必须在所有动态路由之后加
+const catchAllRoute: RouteRecordRaw = {
+  path: '/:pathMatch(.*)*',
+  name: 'pathMatch',
+  redirect: '/404'
+}
+
+// 清除动态路由
+const clearDynamicRoutes = () => {
+  // 移除所有动态路由
+  dynamicRouteNames.forEach(name => {
+    if (router.hasRoute(name)) {
+      router.removeRoute(name)
+    }
+  })
+  dynamicRouteNames.clear()
+
+  // 重新添加通配符，保证404功能
+  router.addRoute(catchAllRoute)
+  dynamicRouteNames.add('pathMatch')
+}
+
+const resetRouter = (accessRoutes?: RouteRecordRaw[]) => {
+  clearDynamicRoutes()
+  // 添加动态路由（排在通配符之前）
+  if (accessRoutes && accessRoutes.length) {
+    accessRoutes.forEach(route => {
+      if (!route.name) {
+        route.name = route.path
+      }
+      router.addRoute(route)
+      dynamicRouteNames.add(route.name as string)
+    })
+  }
+
+  // 最后添加通配符
+  router.addRoute(catchAllRoute)
+  dynamicRouteNames.add('pathMatch')
+}
 
 //导出路由
 export default router
+export { resetRouter, clearDynamicRoutes }
