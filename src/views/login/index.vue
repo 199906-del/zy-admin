@@ -23,6 +23,9 @@ import { useUserStore } from '@/store/modules/user'
 import { useRouterStore } from '@/store/modules/routerList'
 import { message } from 'ant-design-vue';
 import type { FormInstance, Rule } from 'ant-design-vue/es/form'
+import { usePermissionStore } from '@/store/modules/permission'
+import { resetRouter } from '@/router/index'
+
 interface userInfo {
   username: string,
   password: string
@@ -35,6 +38,7 @@ const loginForm: userInfo = reactive({
 
 const userStore = useUserStore()
 const routerStore = useRouterStore()
+const permissionStore = usePermissionStore()
 const router = useRouter()
 
 // 获取表单组件实例
@@ -52,7 +56,6 @@ const rules: Record<string, Rule[]> = {
 
 const handleLogin = async () => {
   // 这里写登录逻辑，比如调用接口
-  console.log('登录信息：', loginForm.username,loginForm. password)
  // 检查表单实例是否存在
  if (!loginFormRef.value) return
  try {
@@ -78,11 +81,12 @@ const handleLogin = async () => {
     roles: res.roles,
   })
   // 保存路由到store
-  routerStore.saveRouter(res.resourceList)
-
-  message.success('登陆成功')
+  routerStore.saveRouter(res.resourceList as any)
+  const accessRoutes = await permissionStore.generateRoutes(res.resourceList as any)
+  resetRouter(accessRoutes)
   // 跳转到重定向页面或首页
   router.push('/')
+  message.success('登陆成功')
  } catch (e: any) {
   // 表单验证失败或登陆失败
   if (e?.errorFields) {

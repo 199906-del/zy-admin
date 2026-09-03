@@ -1,7 +1,7 @@
 <template>
   <div class="menu-scrollbar">
     <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
-      <MenuItem v-for="item in menuList" :key="item.route || item.id" :menu-item="item"></MenuItem>
+      <MenuItem v-for="item in menuList" :key="menuKey(item)" :menu-item="item"></MenuItem>
     </a-menu>
   </div>
 </template>
@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { ref, computed, watch} from 'vue'
 import { useRoute } from 'vue-router'
-import { useRouterStore } from '@/store/modules/routerList'
+import { usePermissionStore } from '@/store/modules/permission.ts'
 import MenuItem from './menuItem.vue'
 
 defineOptions({
@@ -17,30 +17,41 @@ defineOptions({
 })
 
 const route = useRoute()
-const routerStore = useRouterStore()
+const permissionStore = usePermissionStore()
 
 const selectedKeys = ref<string[]>([route.path])
 const openKeys = ref<string[]>([])
-const menuList = computed(() => routerStore.routerList)
+const menuList = computed(() => {
+  return permissionStore.routes
+})
 
 interface MenuRoute {
-  route: string
+  path?: string
+  route?: string
+  id?: string | number
   children?: MenuRoute[]
+}
+
+function menuKey(item: MenuRoute) {
+  return item.path || item.route || String(item.id)
 }
 
 // 找出当前路由所属的所有父级菜单，用于初始化展开菜单
 function findParentKeys(list: MenuRoute[], currentPath: string, parents: string[] = []): string[] {
   for (const item of list) {
-    const nextParents = item.route ? [...parents, item.route] : parents
+    const key = menuKey(item)
+    const nextParents = key ? [...parents, key] : parents
 
-    if (item.route === currentPath) return parents
+    if (key === currentPath) return parents
 
     if (item.children?.length) {
+      if (item.children.some(child => menuKey(child) === currentPath)) {
+        return nextParents
+      }
       const result = findParentKeys(item.children, currentPath, nextParents)
-      if (result.length || item.children.some(child => child.route === currentPath)) return result
+      if (result.length) return result
     }
   }
-
   return []
 }
 

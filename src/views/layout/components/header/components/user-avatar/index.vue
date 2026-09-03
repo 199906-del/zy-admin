@@ -38,12 +38,14 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from "vue-router";
 import { Modal } from 'ant-design-vue'
 import { useUserStore } from '@/store/modules/user'
+import { usePermissionStore } from '@/store/modules/permission'
 import { useRouterStore } from '@/store/modules/routerList'
 import { ArrowLeftOutlined } from '@ant-design/icons-vue'
 import { logout } from '@/api/auth'
 
 const userStore = useUserStore()
 const userRouter = useRouterStore()
+const userPermission = usePermissionStore()
 const router = useRouter();
 
 const { userInfo } = storeToRefs(userStore)
@@ -79,6 +81,7 @@ function LoginOut() {
       await logout()
       userStore.clearUserInfo()
       userRouter.clearRouter()
+      userPermission.clearRoutes()
       router.replace(`/login`)
     },
     onCancel() {}
