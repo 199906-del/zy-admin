@@ -17,7 +17,7 @@ const props =  defineProps<{
   tagItem: TagView
 }>()
 
-const toNextView = (visitedViews: TagView[], view: TagView, nextPathIndex: number) => {
+const toNextView = (visitedViews: TagView[], nextPathIndex: number) => {
   const nextView = visitedViews[nextPathIndex] || visitedViews[nextPathIndex - 1]
   if (nextView) {
     router.push(nextView.fullPath)
@@ -34,7 +34,7 @@ const closeTag = (tab: TagView) => {
   tagStore.closeVisitedView(tab)
   // 如果关闭的是当前激活标签则跳转到其他标签
   if (props.tagItem.title === route.path || props.tagItem.fullPath === route.fullPath) {
-    toNextView(visitedViews.value, tab, nextPathIndex)
+    toNextView(visitedViews.value, nextPathIndex)
   }
 }
 
