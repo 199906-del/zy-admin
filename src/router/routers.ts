@@ -58,7 +58,8 @@ const asyncRouters: RouteRecordRaw[] = [
         name: 'userManage',
         component: () => import('@/views/sys/UserManage/index.vue'),
         meta: {
-          title: '用户管理'
+          title: '用户管理',
+          affix: true
         }
       },
       {
