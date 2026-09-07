@@ -71,6 +71,127 @@ const asyncRouters: RouteRecordRaw[] = [
         }
       }
     ]
+  },
+  {
+    path: '/functionalComponent',
+    name: 'functionalComponent',
+    component: Layout,
+    meta: {
+      title: '功能/组件',
+      icon: 'setting'
+    },
+    redirect: '/functionalComponent/chart/draggableIcon',
+    children: [
+      {
+        path: '/functionalComponent/chart',
+        name: 'chart',
+        // component: Layout,
+        meta: {
+          title: '图表'
+        },
+        // redirect: '/sysManage/userManage',
+        children: [
+          {
+            path: '/functionalComponent/chart/draggableIcon',
+            name: 'draggableIcon',
+            component: () => import('@/views/functionalComponent/chart/draggableIcon/index.vue'),
+            meta: {
+              title: 'icon可拖拽'
+            }
+          },
+          {
+            path: '/functionalComponent/chart/echarts',
+            name: 'echarts',
+            component: () => import('@/views/functionalComponent/chart/echarts/index.vue'),
+            meta: {
+              title: 'echarts'
+            }
+          }
+        ]
+      },
+      {
+        path: '/functionalComponent/player',
+        name: 'player',
+        component: () => import('@/views/functionalComponent/player/index.vue'),
+        meta: {
+          title: '播放器'
+        }
+      },
+      {
+        path: '/functionalComponent/imagePreview',
+        name: 'imagePreview',
+        component: () => import('@/views/functionalComponent/imagePreview/index.vue'),
+        meta: {
+          title: '图片预览'
+        }
+      }
+    ]
+  },
+  {
+    path: '/Form',
+    name: 'Form',
+    component: Layout,
+    meta: {
+      title: '表单',
+      icon: 'setting'
+    },
+    redirect: '/Form/simpleForm',
+    children: [
+      {
+        path: '/Form/simpleForm',
+        name: 'simpleForm',
+        // component: Layout,
+        component: () => import('@/views/Form/simpleForm/index.vue'),
+        meta: {
+          title: '简单图表'
+        }
+        // redirect: '/sysManage/userManage',
+      },
+      {
+        path: '/Form/formValidation',
+        name: 'formValidation',
+        component: () => import('@/views/Form/formValidation/index.vue'),
+        meta: {
+          title: '表单验证'
+        }
+      },
+      {
+        path: '/Form/stepByStepForm',
+        name: 'stepByStepForm',
+        component: () => import('@/views/Form/stepByStepForm/index.vue'),
+        meta: {
+          title: '分步表单'
+        }
+      },
+      {
+        path: '/Form/draggableForm',
+        name: 'draggableForm',
+        component: () => import('@/views/Form/draggableForm/index.vue'),
+        meta: {
+          title: '表单拖拽'
+        }
+      }
+    ]
+  },
+  {
+    path: '/map',
+    name: 'map',
+    component: Layout,
+    meta: {
+      title: '地图',
+      icon: 'setting'
+    },
+    redirect: '/map/Amap',
+    children: [
+      {
+        path: '/map/Amap',
+        name: 'Amap',
+        component: () => import('@/views/map/Amap/index.vue'),
+        meta: {
+          title: '高德地图'
+        }
+      }
+    ]
   }
 ]
 
