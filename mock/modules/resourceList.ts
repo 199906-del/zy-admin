@@ -33,7 +33,7 @@ const adminRouterLists = [
         id: 21,
         name: '图表',
         route: '/functionalComponent/chart',
-        resourceType: 'menu',
+        resourceType: 'folder',
         orderStr: 1,
         children: [
           {
