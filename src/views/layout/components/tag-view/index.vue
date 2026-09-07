@@ -42,7 +42,11 @@ const handleClick = (tag: TagView) => {
 const filterAffixTags = (routes: any[], basePath = '/') => {
   let tags: TagView[] = []
   routes.forEach(route => {
-    const tagPath = basePath === '/' ? route.path : `${basePath}${route.path}`
+    if (route.children && route.children.length) {
+      return
+    }
+    // const tagPath = basePath === '/' ? route.path : `${basePath}${route.path}`
+    const tagPath = route.path.startsWith('/') ? route.path : `${basePath}${basePath.endsWith('/') ? '' : '/'}${route.path}`
     if (route.meta.affix) {
       tags.push({
         fullPath: tagPath,
@@ -53,13 +57,14 @@ const filterAffixTags = (routes: any[], basePath = '/') => {
       } as TagView)
     }
 
-    if (route.children && route.children.length) {
-      const childBasePath = basePath === '/' ? route.path : `${basePath}${route.path}`
-      const tempTags = filterAffixTags(route.children, childBasePath)
-      if (tempTags && tempTags.length) {
-        tags = [...tags, ...tempTags]
-      }
-    }
+    // if (route.children && route.children.length) {
+    //   const childBasePath = route.path.startsWith('/') ? '' : tagPath
+    //   console.log("childBasePath",childBasePath)
+    //   const tempTags = filterAffixTags(route.children, childBasePath)
+    //   if (tempTags && tempTags.length) {
+    //     tags = [...tags, ...tempTags]
+    //   }
+    // }
   })
   return tags
 }
@@ -74,10 +79,11 @@ const getRouteName = (route: any): string | undefined => {
 
 const initTags = () => {
   const affixTags = filterAffixTags(routes.value)
-  console.log("affixTags",affixTags)
+  console.log("affixTags", affixTags)
   for (const tag of affixTags) {
     if (tag.name) {
       tagStore.addVisitedViews(tag)
+      tagStore.addCacheView(tag.name as string)
     }
   }
 }

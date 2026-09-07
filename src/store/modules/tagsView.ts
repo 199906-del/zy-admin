@@ -21,12 +21,15 @@ export const useTagsView = defineStore('tagsView', () => {
       visitedViews.value.push(
         Object.assign({}, route, { title: route.meta.title })
       )
+      // addCacheView(route.name)
     }
   }
 
   // 新增缓存
   const addCacheView = (name: string) => {
-    cacheViews.value.push(name)
+    if (!cacheViews.value.includes(name)) {
+      cacheViews.value.push(name)
+    }
   }
 
   // 删除缓存
