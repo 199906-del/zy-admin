@@ -1,6 +1,6 @@
 <template>
   <div class="menu-scrollbar">
-    <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
+    <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :accordion="false">
       <MenuItem v-for="item in menuList" :key="menuKey(item)" :menu-item="item"></MenuItem>
     </a-menu>
   </div>
@@ -60,7 +60,11 @@ watch(
   [() => route.path, menuList],
   ([newPath, list]) => {
     selectedKeys.value = [newPath]
-    openKeys.value = findParentKeys(list as MenuRoute[], newPath)
+
+    const parentKeys = findParentKeys(list as MenuRoute[], newPath)
+
+    openKeys.value = [...new Set([...openKeys.value, ...parentKeys])]
+    // openKeys.value = findParentKeys(list as MenuRoute[], newPath)
   },
   { immediate: true }
 )
@@ -69,7 +73,7 @@ watch(
 
 <style lang="scss" scoped>
 .menu-scrollbar {
-  height: 100%;
+  height: calc(100vh - 64px);
   overflow-y: auto;
   overflow-x: hidden;
 }

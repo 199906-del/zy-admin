@@ -25,8 +25,8 @@ export const usePermissionStore = defineStore('usePermission', () => {
       // 构建完整路径(如果path以/开头则说明是绝对路径，可以直接使用，如果不是则需要拼接parentPath)
       const fullPath = path.startsWith('/') ? path : `${parentPath}/${path}`
       set.add(fullPath) // 添加当前路径
-      // 处理当前路径下的children,如果children里有子路由则接着递归
-      if (r.children && r.children.length) {
+      // 处理当前路径下的children,如果children里有子路由则接着递归，folder下的才是路由菜单，menu下的children放着权限按钮
+      if (r.resourceType === 'folder' && r.children && r.children.length) {
         listToSet(r.children, fullPath, set)
       }
     })

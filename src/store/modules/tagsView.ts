@@ -51,12 +51,20 @@ export const useTagsView = defineStore('tagsView', () => {
       removeCache(route.name)
     }
   }
+
+  // 清除缓存
+  const clearView = () => {
+    cacheViews.value = []
+    visitedViews.value = []
+  }
+  
   return {
     cacheViews,
     visitedViews,
     addVisitedViews,
     closeVisitedView,
     removeCache,
-    addCacheView
+    addCacheView,
+    clearView
   }
 })
