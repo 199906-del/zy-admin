@@ -32,18 +32,40 @@ export const usePermissionStore = defineStore('usePermission', () => {
     })
   }
 
-  // 深拷贝
-  const deepClone = <T>(obj: T): T => {
-    // 基础类型处理
-    if (obj === null || typeof obj !== 'object' ) return obj
-    // 数组处理,对每个元素递归调用 deepClone,最后返回一个新数组
-    if (Array.isArray(obj)) return obj.map(item => deepClone(item)) as T
-    // 对象处理
-    const cloned: any = {}
-    for (const key in obj) {
-      // 检查属性是否是自己的，因为深拷贝拷贝的是自己本身的属性，所以需要先检查
-      if (obj.hasOwnProperty(key)) {
-        cloned[key] = deepClone(obj[key] as any)
+// 深拷贝
+  const deepClone = <T>(obj: T, seen = new WeakMap<object, any>()): T => {
+    // 基础类型 + function + null 直接返回
+    if (obj === null || typeof obj !== 'object') return obj
+    // 循环引用：已拷贝过就直接返回之前的副本
+    if (seen.has(obj as object)) return seen.get(obj as object) as T
+    // Date
+    if (obj instanceof Date) return new Date(obj.getTime()) as T
+    // RegExp
+    if (obj instanceof RegExp) return new RegExp(obj.source, obj.flags) as T
+    // 数组
+    if (Array.isArray(obj)) {
+      const arr: any[] = []
+      seen.set(obj as object, arr)
+      obj.forEach((item, i) => { arr[i] = deepClone(item, seen) })
+      return arr as T
+    }
+    // 对象：保留原型链 + 拷贝全部自有属性（含不可枚举）
+    const cloned = Object.create(Object.getPrototypeOf(obj))
+    seen.set(obj as object, cloned)
+    const keys = Object.getOwnPropertyNames(obj)
+    for (const key of keys) {
+      const desc = Object.getOwnPropertyDescriptor(obj, key)!
+      if ('value' in desc) {
+        // 普通属性：递归拷贝 value，保留描述符
+        Object.defineProperty(cloned, key, {
+          enumerable: desc.enumerable,
+          configurable: desc.configurable,
+          writable: desc.writable,
+          value: deepClone(desc.value, seen)
+        })
+      } else {
+        // getter/setter：直接复用原描述符，不递归
+        Object.defineProperty(cloned, key, desc)
       }
     }
     return cloned as T
@@ -122,6 +144,8 @@ export const usePermissionStore = defineStore('usePermission', () => {
   }
 
   const generateRoutes = (resource: RouteConfig[]) => {
+    // 保存原始resource到localStorage，刷新时需要用他重新生成路由（而非序列化后丢失component的最终路由）
+    localStorage.setItem('resource', JSON.stringify(resource))
     const routeArray = [...treeToSet(resource)] // 后端返回的所有权限路由（Array<string>），包括子路由
     // 建立一个前端中有权限路由的全量副本
     const asyncRoutes_copy = deepClone(asyncRouters)
@@ -130,6 +154,7 @@ export const usePermissionStore = defineStore('usePermission', () => {
     if (accessedRoutes.length) {
       // 排序
       setOrder(accessedRoutes, resource)
+      
       // 重新设置重定向
       accessedRoutes.forEach(e => {
         e.redirect = e.children?.[0].path ?? ''
@@ -151,9 +176,8 @@ export const usePermissionStore = defineStore('usePermission', () => {
     //   }
     // })
     // permission_routes = permission_routes.concat(apps)
-    
     routes.value = permission_routes
-    // 保存到pinia
+    // 保存到pinia（仅内存状态，不再写lacalStorage）
     routerStore.saveRouter(permission_routes)
     return accessedRoutes
   }

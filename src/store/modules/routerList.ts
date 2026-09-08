@@ -28,8 +28,8 @@ export const useRouterStore = defineStore('router',() => {
   // actions
   // 从登录保存路由
   function saveRouter(r: RouteConfig[]) {
-    localStorage.setItem('resource', JSON.stringify(r))
-    sessionStorage.setItem('resource', JSON.stringify(r))
+    // localStorage.setItem('resource', JSON.stringify(r))
+    // sessionStorage.setItem('resource', JSON.stringify(r))
     routerList.value = r
   }
 
@@ -39,8 +39,8 @@ export const useRouterStore = defineStore('router',() => {
 
   function clearRouter() {
     routerList.value = []
-    localStorage.removeItem('resource')
-    sessionStorage.removeItem('resource')
+    // localStorage.removeItem('resource')
+    // sessionStorage.removeItem('resource')
   }
 
   // restoreRouter()
