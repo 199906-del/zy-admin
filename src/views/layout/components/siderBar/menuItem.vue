@@ -1,24 +1,28 @@
 <template>
   <template v-if="menuItem.children && menuItem.children.length && isHidden(menuItem) ">
     <a-sub-menu :key="menuKey(menuItem)">
+      <template #icon>
+        <SvgIcon v-if="menuItem.meta?.icon" :name="menuItem.meta?.icon" size="18px"></SvgIcon>
+      </template>
       <template #title>
-        <span class="menu-title-wrapper">
-          <SvgIcon v-if="menuItem.meta?.icon" :name="menuItem.meta?.icon" size="18px"></SvgIcon>
-          <span v-if="!collapsed">{{ menuItem.meta?.title }}</span>
-        </span> 
+          {{ menuItem.meta?.title }}
       </template>
       <MenuItem v-for="child in menuItem.children" :key="menuKey(child)" :menu-item="child"></MenuItem>
     </a-sub-menu>
   </template>
+
   <a-menu-item v-else-if="isHidden(menuItem)" :key="menuKey(menuItem)" @click="handleMenuClick(menuKey(menuItem))">
+    <template #icon>
+      <SvgIcon v-if="menuItem.meta?.icon" :name="menuItem.meta?.icon" size="18px"></SvgIcon>
+    </template>
     {{ menuItem.meta?.title }}
   </a-menu-item>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+// import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useSettingStore } from '@/store/modules/setting'
+// import { useSettingStore } from '@/store/modules/setting'
 import type { RouteConfig } from '@/api/types'
 defineOptions({
   name: 'menuItem'
@@ -29,11 +33,8 @@ defineProps<{
 }>()
 
 const router = useRouter()
-const settingStore = useSettingStore()
+// const settingStore = useSettingStore()
 
-const collapsed = computed(() => {
-  return settingStore.menuCollapse
-})
 
 function menuKey(menuItem: RouteConfig) {
   return menuItem.path || menuItem.route || String(menuItem.id)
