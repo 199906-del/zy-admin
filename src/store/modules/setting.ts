@@ -8,7 +8,6 @@ export const useSettingStore = defineStore('settingStore', () => {
   // actions
   function changeMenuCollapse() {
     menuCollapse.value = !menuCollapse.value
-    console.log("menuCollapse", menuCollapse.value)
   }
 
   return {
