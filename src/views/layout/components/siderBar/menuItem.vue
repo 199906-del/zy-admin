@@ -5,7 +5,7 @@
         <SvgIcon v-if="menuItem.meta?.icon" :name="menuItem.meta?.icon" size="18px"></SvgIcon>
       </template>
       <template #title>
-          {{ menuItem.meta?.title }}
+        {{ menuItem.meta?.title }}
       </template>
       <MenuItem v-for="child in menuItem.children" :key="menuKey(child)" :menu-item="child"></MenuItem>
     </a-sub-menu>
@@ -35,6 +35,9 @@ defineProps<{
 const router = useRouter()
 // const settingStore = useSettingStore()
 
+// 获取折叠状态
+// const collapsed = computed(() => settingStore.menuCollapse)
+
 
 function menuKey(menuItem: RouteConfig) {
   return menuItem.path || menuItem.route || String(menuItem.id)
@@ -56,17 +59,22 @@ function handleMenuClick(route: string | undefined) {
 </script>
 
 <style lang="scss" scoped>
-.menu-title-wrapper {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
+// .menu-title-wrapper {
+//   display: inline-flex;
+//   align-items: center;
+//   gap: 10px;
+// }
 :deep(.ant-menu-item) {
   height: 40px !important;
   line-height: 4px !important;
+  transition: none !important;
 }
 :deep(.ant-menu-submenu-title) {
   height: 40px !important;
+  transition: none !important;
   line-height: 40px !important;
+}
+:deep(.ant-menu) {
+  transition: none !important;
 }
 </style>

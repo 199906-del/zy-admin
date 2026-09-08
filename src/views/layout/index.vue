@@ -1,6 +1,6 @@
 <template>
   <a-layout>
-    <a-layout-sider class="siderBar" v-model:collapsed="collapsed" :trigger="null" collapsible>
+    <a-layout-sider class="siderBar" v-model:collapsed="collapsed" :trigger="null" collapsible :collapsedWidth="58">
       <div class="titleWrap"> 
         <img :src="defaultSetting.logo"/>
         <div class="title" :class="{collapsed: settingStore.menuCollapse}">{{ defaultSetting.name }}</div>
@@ -51,6 +51,7 @@ const cacheViews = computed(() => {
   background-color: #ffffff;
   color: #000000;
   font-size: 26px;
+  // transition: width 2s ease !important;
 
   .titleWrap {
     display: flex;
@@ -66,15 +67,14 @@ const cacheViews = computed(() => {
         white-space: nowrap;
         overflow: hidden;
         max-width: 200px;
-        opacity: 1;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin-left 0.3s ease;
       }
   }
   
 }
+:deep(.ant-layout-sider) {
+  transition: width 0.2s ease, min-width 0.2s ease, max-width 0.2s ease !important;
+}
 .title.collapsed {
-  opacity: 0;
-  margin-left: 0;
-  max-width: 0;
+  display: none;
 }
 </style>

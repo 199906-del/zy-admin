@@ -1,6 +1,6 @@
 <template>
-  <div class="menu-scrollbar">
-    <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :accordion="false">
+  <div class="menu-scrollbar" :class="{'menu-collapsed': settingStore.menuCollapse}">
+    <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :inlineCollapsed="settingStore.menuCollapse" :accordion="false">
       <MenuItem v-for="item in menuList" :key="menuKey(item)" :menu-item="item"></MenuItem>
     </a-menu>
   </div>
@@ -10,6 +10,7 @@
 import { ref, computed, watch} from 'vue'
 import { useRoute } from 'vue-router'
 import { usePermissionStore } from '@/store/modules/permission.ts'
+import { useSettingStore } from '@/store/modules/setting.ts'
 import MenuItem from './menuItem.vue'
 
 defineOptions({
@@ -18,6 +19,7 @@ defineOptions({
 
 const route = useRoute()
 const permissionStore = usePermissionStore()
+const settingStore = useSettingStore()
 
 const selectedKeys = ref<string[]>([route.path])
 const openKeys = ref<string[]>([])
@@ -76,6 +78,19 @@ watch(
   height: calc(100vh - 64px);
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+/* 收起时立即隐藏所有菜单文字，css同步生效不卡顿 */
+.menu-collapsed :deep(.ant-menu-title-content) {
+  display: none !important;
+}
+
+/* 禁用菜单收缩动画 */
+:deep(.ant-menu-item),
+:deep(.ant-menu-submenu-title),
+:deep(.ant-menu-inline),
+:deep(.ant-menu) {
+  transition: none !important;
 }
 
 /* 自定义滚动条样式 */
