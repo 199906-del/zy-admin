@@ -134,7 +134,6 @@ const getRouteName = (route: any): string | undefined => {
 
 const initTags = () => {
   const affixTags = filterAffixTags(routes.value)
-  console.log("affixTags", affixTags)
   for (const tag of affixTags) {
     if (tag.name) {
       tagStore.addVisitedViews(tag)
