@@ -1,6 +1,6 @@
 <template>
   <div class="menu-scrollbar" :class="{'menu-collapsed': settingStore.menuCollapse}">
-    <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :inlineCollapsed="settingStore.menuCollapse" :accordion="false">
+    <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :accordion="false">
       <MenuItem v-for="item in menuList" :key="menuKey(item)" :menu-item="item"></MenuItem>
     </a-menu>
   </div>
