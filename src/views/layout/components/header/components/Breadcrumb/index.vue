@@ -100,7 +100,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     flex-wrap: nowrap !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
 
     .ant-breadcrumb-link {
       display: inline-flex !important;
