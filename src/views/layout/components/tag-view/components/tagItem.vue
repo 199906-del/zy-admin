@@ -50,6 +50,8 @@ const isActive = computed(() => {
 
 <style lang="scss" scoped>
 .tagItem {
+  background-color: #ffffff;
+  color: #797676;
   display: inline-flex;
   align-items: center;
   margin: 10px;
