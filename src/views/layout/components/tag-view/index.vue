@@ -143,6 +143,7 @@ const initTags = () => {
 }
 
 const addTags = () => {
+  if (route.meta?.requiresAuth === false) return
   tagStore.addVisitedViews(route)
   const routeName = getRouteName(route)
   if (routeName) {

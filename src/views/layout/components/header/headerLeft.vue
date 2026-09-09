@@ -6,12 +6,14 @@
       @click="changeCollapsed"
     />
     <menu-fold-outlined v-else class="trigger" @click="changeCollapsed" />
+    <Breadcrumb></Breadcrumb>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useSettingStore } from '@/store/modules/setting.ts'
+import Breadcrumb from './components/Breadcrumb/index.vue'
 
 const settingStore = useSettingStore()
 
