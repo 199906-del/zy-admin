@@ -58,7 +58,7 @@ const isActive = computed(() => {
   border: 1px solid #e2e8f0;
   border-radius: 5px;
   padding: 0 11px;
-  height: 32px;
+  height: 28px;
   transition: all 0.3s ease;
 }
 .tagItem:hover {
@@ -75,6 +75,10 @@ const isActive = computed(() => {
 
 .tagItem.active span {
   color: #395ae3;
+}
+
+.anticon-close {
+  font-size: 12px;
 }
 
 .tagItem.active .anticon-close {

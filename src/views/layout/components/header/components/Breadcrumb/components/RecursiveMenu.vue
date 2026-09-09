@@ -67,7 +67,7 @@ const getVisibleChildren = (item: any) => {
 
   .menu-item-check {
     color: #1890ff;
-    font-size: 14px;
+    font-size: 12px;
     margin-left: 8px;
   }
 }
@@ -78,7 +78,7 @@ const getVisibleChildren = (item: any) => {
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
-  font-size: 14px;
+  font-size: 12px;
   transition: all 0.2s;
 
   &:hover {
@@ -93,7 +93,7 @@ const getVisibleChildren = (item: any) => {
 
 :deep(.ant-dropdown-menu-item) {
   padding: 10px 16px;
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
