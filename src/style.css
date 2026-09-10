@@ -301,3 +301,24 @@ code {
 .ant-divider {
   margin: 8px 0;
 }
+
+/*移动端全局适配*/
+@media (max-width: 992px) {
+  .ant-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .ant-form-inline .ant-form-item {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .ant-modal {
+    max-width: calc(100vw - 32px) !important;
+    margin: 16px auto !important;
+  }
+
+  .ant-drawer-content-wrapper {
+    max-width: 85vw;
+  }
+}

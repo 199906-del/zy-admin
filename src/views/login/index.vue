@@ -102,6 +102,14 @@ const handleLogin = async () => {
 </script>
 
 <style scoped lang="scss">
+@media (max-width: 480px) {
+  .login-container {
+    max-width: 90%;
+    margin: 40px auto;
+    padding: 16px;
+  }
+}
+
 .login-container {
   max-width: 400px;
   margin: 100px auto;

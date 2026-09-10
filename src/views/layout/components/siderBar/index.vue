@@ -1,6 +1,6 @@
 <template>
-  <div class="menu-scrollbar" :class="{'menu-collapsed': settingStore.menuCollapse}">
-    <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :accordion="false">
+  <div class="menu-scrollbar" :class="{'menu-collapsed': !isMobile && settingStore.menuCollapse}">
+    <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :accordion="false" @click="emit('menuClick')">
       <MenuItem v-for="item in menuList" :key="menuKey(item)" :menu-item="item"></MenuItem>
     </a-menu>
   </div>
@@ -8,6 +8,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch} from 'vue'
+import { useCommon } from '@/composables/useCommon.ts'
 import { useRoute } from 'vue-router'
 import { usePermissionStore } from '@/store/modules/permission.ts'
 import { useSettingStore } from '@/store/modules/setting.ts'
@@ -17,9 +18,14 @@ defineOptions({
   name: 'menu-scrollbar'
 })
 
+const emit = defineEmits<{
+  (e: 'menuClick'): void
+}>()
+
 const route = useRoute()
 const permissionStore = usePermissionStore()
 const settingStore = useSettingStore()
+const { isMobile } = useCommon()
 
 const selectedKeys = ref<string[]>([route.path])
 const openKeys = ref<string[]>([])
