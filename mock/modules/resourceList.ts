@@ -47,7 +47,7 @@ const adminRouterLists = [
             id: 32,
             name: 'echarts',
             resourceType: 'menu',
-            route: '/functionalComponent/chart/echarts',
+            route: '/functionalComponent/chart/echartsChart',
             orderStr: 2
           }
         ]
