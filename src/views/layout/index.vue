@@ -69,7 +69,11 @@ const mobileMenuOpen = ref(false)
 
 // 移动端自动收起侧边栏
 watch(isMobile, (val) => {
-  if (val) settingStore.menuCollapse = true
+  if (val) {
+    settingStore.menuCollapse = true
+  } else {
+    settingStore.menuCollapse = false
+  }
 })
 
 // 路由切换关闭Drawer
