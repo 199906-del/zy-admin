@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { computed, ref, reactive, watch, createVNode, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { ExclamationCircleOutlined, SmileOutlined  } from '@ant-design/icons-vue';
+import { ExclamationCircleOutlined, SmileOutlined  } from '@ant-design/icons-vue'
 import { organization } from '#/modules/Org'
 import { userData } from '#/modules/tableData'
 import { Modal, message } from 'ant-design-vue'
@@ -183,6 +183,11 @@ const columns = [
     title: '状态',
     dataIndex: 'status',
     key: 'status'
+  },
+  {
+    title: '组织',
+    dataIndex: 'organization',
+    key: 'organization'
   },
   {
     title: '操作',
@@ -315,7 +320,6 @@ const handleBatchDelete = () => {
   display: flex;
   width: 100%;
   height: 100%;
-  padding: 16px;
   box-sizing: border-box;
   overflow: hidden;
 
