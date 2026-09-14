@@ -25,7 +25,7 @@
         <a-button type="primary" danger @click="handleBatchDelete">删除</a-button>
       </div>
       <div ref="tableWrapRef" class="table_wrapper">
-        <a-table :columns="columns" :data-source="userTableData" :pagination="pagination" :scroll="{ y: tableScrollY }"
+        <a-table :columns="columns" :data-source="userTableData" :pagination="pagination" :scroll="{ x: 900, y: tableScrollY }"
           :row-selection="rowSelection" row-key="id" @change="handleTableChange">
           <template #headerCell="{ column }">
             <template v-if="column.key === 'name'">
@@ -324,9 +324,10 @@ const handleBatchDelete = () => {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
-    width: 20%;
+    width: 220px;
     padding: 8px;
     background-color: #ffffff;
+    transition: width 0.3s;
 
     .input {
       display: flex;
@@ -348,6 +349,7 @@ const handleBatchDelete = () => {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-width: 0;
     padding: 24px;
     margin-left: 16px;
     background-color: #ffffff;
@@ -364,6 +366,27 @@ const handleBatchDelete = () => {
       flex: 1;
       min-height: 0;
       overflow: hidden;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .userManage {
+    flex-direction: column;
+    overflow-y: auto;
+
+    .left_content {
+      width: 100%;
+      max-height: 200px;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    .right_content {
+      margin-left: 0;
+      padding: 16px;
+      flex: 1;
+      min-width: 0;
     }
   }
 }
