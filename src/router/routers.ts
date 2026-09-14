@@ -100,9 +100,9 @@ const asyncRouters: RouteRecordRaw[] = [
             }
           },
           {
-            path: '/functionalComponent/chart/echarts',
+            path: '/functionalComponent/chart/echartsChart',
             name: 'echarts',
-            component: () => import('@/views/functionalComponent/chart/echarts/index.vue'),
+            component: () => import('@/views/functionalComponent/chart/echartsChart/index.vue'),
             meta: {
               title: 'echarts'
             }

@@ -136,6 +136,11 @@ watch(
   display: none;
 }
 
+:deep(.main-content) {
+  overflow: hidden;
+  height: 100%;
+}
+
 .is-mobile .main-content {
   padding: 8px !important;
 }
@@ -144,5 +149,12 @@ watch(
   font-size: 20px;
   cursor: pointer;
   margin-right: 12px;
+}
+</style>
+<style>
+.ant-layout-content.main-content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 </style>

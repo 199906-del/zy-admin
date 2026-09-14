@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "analyze": "vue-tsc -b && vite build --mode analyze"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
@@ -15,6 +16,7 @@
     "axios": "^1.19.0",
     "mockjs": "^1.1.0",
     "pinia": "^4.0.3",
+    "rollup-plugin-visualizer": "^7.1.1",
     "vue": "^3.5.40",
     "vue-router": "^4.6.4"
   },
