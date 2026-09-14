@@ -57,7 +57,8 @@ export default defineConfig(({ mode }) => {
     ].filter(Boolean), // 过滤掉 mode !== 'analyze' 时 visualizer 返回的 false
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src')
+        '@': path.resolve(__dirname, './src'),
+        '#': path.resolve(__dirname, './mock')
       }
     },
 
