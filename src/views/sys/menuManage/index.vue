@@ -96,6 +96,7 @@ const columns = [
   {
     title: '菜单名称',
     dataIndex: 'name',
+    width: '160px',
     key: 'name'
   },
   {
@@ -125,7 +126,8 @@ const columns = [
   },
   {
     title: '操作',
-    key: 'action'
+    key: 'action',
+    width: '180px'
   }
 ]
 const open = ref<boolean>(false)
