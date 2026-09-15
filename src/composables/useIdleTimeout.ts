@@ -1,15 +1,16 @@
-import { useUserStore } from '@/store'
+import { useUserStore } from '@/store/modules/user'
 import { ref, onMounted, onUnmounted } from 'vue'
-import router from '@/router'
+import { useRouter } from 'vue-router'
 
 const DEFAULT_TIMEOUT_MS = 6 * 60 * 60 * 1000
 
 export function useIdleTimeout(timeoutMs: number = DEFAULT_TIMEOUT_MS) {
   const userStore = useUserStore()
+  const router = useRouter()
   const lastActivity = ref(Date.now())
   let timer: ReturnType<typeof setTimeout> | null = null
 
-  const handleLogogout = () => {
+  const handleLoggout = () => {
     // 清除用户信息和token
     userStore.clearUserInfo()
     localStorage.removeItem('resource')
@@ -25,7 +26,7 @@ export function useIdleTimeout(timeoutMs: number = DEFAULT_TIMEOUT_MS) {
     if (timer) clearTimeout(timer)
     // 只有已登录状态才启动倒计时
     if (localStorage.getItem('token')) {
-      timer = setTimeout(handleLogogout, timeoutMs)
+      timer = setTimeout(handleLoggout, timeoutMs)
     }
   }
 
