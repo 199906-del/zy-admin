@@ -11,6 +11,7 @@ import 'virtual:svg-icons-register'
 
 // 导入SVG图标组件
 import SvgIcon from '@/components/SvgIcon/SvgIconInsex.vue'
+import '@/assets/iconfont/iconfont.js'
 
 // 开发环境引入 mock
 if (import.meta.env.DEV) {
