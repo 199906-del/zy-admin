@@ -321,8 +321,8 @@ const confirm = async () => {
     name: formState.name,
     resourceType: formState.resourceType,
     orderStr: formState.orderStr,
-    route: formState.routePath,      // routePath → route
-    display: formState.isDisplay     // isDisplay → display
+    route: formState.routePath,      // routePath -> route
+    display: formState.isDisplay     // isDisplay -> display
   }
   if (editingId.value == null) {
     // 新增
