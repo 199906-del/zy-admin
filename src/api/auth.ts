@@ -7,7 +7,8 @@ import { adminRouterLists, userRouterLists } from '../../mock/modules/resourceLi
 interface Route {
   id: number,
   name: string,
-  route: string,
+  display?: boolean,
+  route: string | null,
   icon?: string,
   resourceType: string,
   children?: Route[]
