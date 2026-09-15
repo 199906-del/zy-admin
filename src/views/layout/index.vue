@@ -156,5 +156,7 @@ watch(
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  padding: 12px;
+  box-sizing: border-box;
 }
 </style>
