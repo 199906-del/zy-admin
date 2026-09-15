@@ -11,6 +11,7 @@
       <a-form-item>
         <a-button class="login-btn" type="primary" size="large" :loading="loading" block @click="handleLogin">登录</a-button>
       </a-form-item>
+      <div v-if="isIdleLogout" class="idle-tip">您已长时间未操作，请重新登录</div>
     </a-form>
   </div>
 </template>
@@ -18,7 +19,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { login } from '@/api/auth';
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
 import { useRouterStore } from '@/store/modules/routerList'
 import { message } from 'ant-design-vue';
@@ -40,6 +41,10 @@ const userStore = useUserStore()
 const routerStore = useRouterStore()
 const permissionStore = usePermissionStore()
 const router = useRouter()
+const route = useRoute()
+
+// 判断是否因超时被登出
+const isIdleLogout = route.query.reason === 'idle'
 
 // 获取表单组件实例
 const loginFormRef = ref<FormInstance>()
@@ -116,5 +121,12 @@ const handleLogin = async () => {
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
+}
+
+.idle-tip {
+  text-align: center;
+  color: #faad14;
+  font-size: 13px;
+  margin-top: 8px;
 }
 </style>
