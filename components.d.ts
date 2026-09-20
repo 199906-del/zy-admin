@@ -43,8 +43,10 @@ declare module 'vue' {
     DownOutlined: typeof import('@ant-design/icons-vue')['DownOutlined']
     MenuFoldOutlined: typeof import('@ant-design/icons-vue')['MenuFoldOutlined']
     MenuUnfoldOutlined: typeof import('@ant-design/icons-vue')['MenuUnfoldOutlined']
+    MyPlayer: typeof import('./src/components/Player/MyPlayer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SvgIconInsex: typeof import('./src/components/SvgIcon/SvgIconInsex.vue')['default']
+    VideoPlayer: typeof import('./src/components/Player/VideoPlayer.vue')['default']
   }
 }
