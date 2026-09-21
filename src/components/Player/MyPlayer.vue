@@ -229,13 +229,33 @@ const onRateChange = () => {
 // ===== 全屏 =====
 const toggleFullscreen = async () => {
   const el = playerRef.value
+  const video = videoRef.value
   if (!el) return
+
   try {
-    if (!document.fullscreenElement) {
-      await el.requestFullscreen()
-    } else {
-      await document.exitFullscreen()
+    // iOS Safari 只允许 video 使用自己的原生全屏接口
+    const nativeVideo = video as (HTMLVideoElement & {
+      webkitEnterFullscreen?: () => void
+      webkitExitFullscreen?: () => void
+    }) | null
+
+    if (nativeVideo?.webkitEnterFullscreen && !isFullscreen.value) {
+      nativeVideo.webkitEnterFullscreen()
+      isFullscreen.value = true
+      return
     }
+
+    if (document.fullscreenElement) {
+      await document.exitFullscreen()
+      return
+    }
+
+    if (el.requestFullscreen) {
+      await el.requestFullscreen()
+      return
+    }
+
+    console.warn('当前浏览器不支持全屏播放')
   } catch (err) {
     console.warn('全屏失败', err)
   }
@@ -243,6 +263,14 @@ const toggleFullscreen = async () => {
 
 const onFullscreenChange = () => {
   isFullscreen.value = !!document.fullscreenElement
+}
+
+const onNativeFullscreenStart = () => {
+  isFullscreen.value = true
+}
+
+const onNativeFullscreenEnd = () => {
+  isFullscreen.value = false
 }
 
 // ===== 控制条自动隐藏 =====
@@ -337,11 +365,15 @@ watch(() => props.src, (newSrc) => {
 onMounted(() => {
   document.addEventListener('fullscreenchange', onFullscreenChange)
   document.addEventListener('keydown', onKeydown)
+  videoRef.value?.addEventListener('webkitbeginfullscreen', onNativeFullscreenStart)
+  videoRef.value?.addEventListener('webkitendfullscreen', onNativeFullscreenEnd)
 })
 
 onBeforeUnmount(() => {
   document.removeEventListener('fullscreenchange', onFullscreenChange)
   document.removeEventListener('keydown', onKeydown)
+  videoRef.value?.removeEventListener('webkitbeginfullscreen', onNativeFullscreenStart)
+  videoRef.value?.removeEventListener('webkitendfullscreen', onNativeFullscreenEnd)
   clearTimeout(hideTimer)
   videoRef.value?.pause()
 })
