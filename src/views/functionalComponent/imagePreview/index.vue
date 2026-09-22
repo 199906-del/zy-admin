@@ -50,7 +50,7 @@
   gap: 24px;
 
   .title {
-    text-align: left;
+    // text-align: left;
     font-size: 18px;
     font-weight: 700;
     flex-shrink: 0;
