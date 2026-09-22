@@ -17,15 +17,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, h } from 'vue'
 import { login } from '@/api/auth';
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
 import { useRouterStore } from '@/store/modules/routerList'
-import { message } from 'ant-design-vue';
+import { message, notification } from 'ant-design-vue';
 import type { FormInstance, Rule } from 'ant-design-vue/es/form'
 import { usePermissionStore } from '@/store/modules/permission'
 import { resetRouter } from '@/router/index'
+import { SmileOutlined  } from '@ant-design/icons-vue';
 
 interface userInfo {
   username: string,
@@ -92,6 +93,7 @@ const handleLogin = async () => {
   // 跳转到重定向页面或首页
   router.push('/')
   message.success('登陆成功')
+  openNotification()
  } catch (e: any) {
   // 表单验证失败或登陆失败
   if (e?.errorFields) {
@@ -102,6 +104,18 @@ const handleLogin = async () => {
  } finally {
   loading.value = false
  }
+}
+
+const openNotification = () => {
+  notification.open({
+    message: '欢迎回来',
+    description:
+      '今天也是美好的一天哦~',
+    icon: () => h(SmileOutlined , { style: 'color: #ffd666' }),
+    onClick: () => {
+      console.log('Notification Clicked!');
+    },
+  });
 }
 
 </script>
