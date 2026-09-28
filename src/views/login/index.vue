@@ -1,14 +1,15 @@
 <template>
   <div class="login-container">
     <h2>用户登录</h2>
-    <a-form name="login-form" ref="loginFormRef" :model="loginForm" :rules="rules" class="login-form" @keyup.enter="handleLogin">
+    <a-form name="login-form" ref="loginFormRef" :model="loginForm" :rules="rules" class="login-form" :label-col="{ span: 6 }"
+  :wrapper-col="{ span: 18 }" @keyup.enter="handleLogin">
       <a-form-item label="用户名：" name="username">
         <a-input v-model:value="loginForm.username" placeholder="请输入用户名 (admin/user)"></a-input>
       </a-form-item>
       <a-form-item label="密码：" name="password">
         <a-input-password v-model:value="loginForm.password" placeholder="请输入密码(admin/user)"></a-input-password>
       </a-form-item>
-      <a-form-item>
+      <a-form-item :wrapper-col="{ span: 24 }">
         <a-button class="login-btn" type="primary" size="large" :loading="loading" block @click="handleLogin">登录</a-button>
       </a-form-item>
       <div v-if="isIdleLogout" class="idle-tip">您已长时间未操作，请重新登录</div>
