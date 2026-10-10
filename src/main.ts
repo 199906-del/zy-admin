@@ -13,6 +13,9 @@ import 'virtual:svg-icons-register'
 import SvgIcon from '@/components/SvgIcon/SvgIconInsex.vue'
 import '@/assets/iconfont/iconfont.js'
 
+// 注册自定义指令
+import { permissionDirective } from './directives/permission.ts'
+
 // 开发环境引入 mock
 if (import.meta.env.DEV) {
   import('../mock');
@@ -24,6 +27,7 @@ app.component('SvgIcon', SvgIcon)
 
 app.use(pinia)
 app.use(router)
+app.directive('permission', permissionDirective)
 
 app.mount('#app')
 

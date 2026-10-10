@@ -4,10 +4,12 @@ import { asyncRouters, constantRoutes } from '@/router/routers'
 import { useRouterStore } from './routerList'
 import type { RouteConfig } from '@/api/types'
 import { clearDynamicRoutes } from '@/router/index'
+import { getPermission } from '@/utils/permission'
 
 export const usePermissionStore = defineStore('usePermission', () => {
   const routes = ref<RouteConfig[]>([])
   const routerStore = useRouterStore()
+  const permission = ref<string[]>([])
 
   //  遍历树形结构，收集所有路径，便于过滤
   const treeToSet = (resource: RouteConfig[]) => {
@@ -146,6 +148,9 @@ export const usePermissionStore = defineStore('usePermission', () => {
   const generateRoutes = (resource: RouteConfig[]) => {
     // 保存原始resource到localStorage，刷新时需要用他重新生成路由（而非序列化后丢失component的最终路由）
     localStorage.setItem('resource', JSON.stringify(resource))
+    // 保存权限按钮
+    permission.value = getPermission(resource)
+    console.log("permission",permission.value)
     const routeArray = [...treeToSet(resource)] // 后端返回的所有权限路由（Array<string>），包括子路由
     // 建立一个前端中有权限路由的全量副本
     const asyncRoutes_copy = deepClone(asyncRouters)
@@ -188,6 +193,7 @@ export const usePermissionStore = defineStore('usePermission', () => {
   }
   return {
     routes,
+    permission,
     generateRoutes,
     findItemKey,
     clearRoutes
