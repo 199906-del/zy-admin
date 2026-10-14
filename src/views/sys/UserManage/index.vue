@@ -23,7 +23,7 @@
     <div class="right_content">
       <div class="btnWrap">
         <a-button type="primary" v-permission="'新建用户'" @click="addUser">新建用户</a-button>
-        <a-button type="primary" danger @click="handleBatchDelete">删除</a-button>
+        <a-button type="primary" danger class="delete-btn" @click="handleBatchDelete">删除</a-button>
       </div>
       <div ref="tableWrapRef" class="table_wrapper">
         <a-table :columns="columns" :data-source="userTableData" :pagination="pagination"
@@ -559,7 +559,11 @@ const handleBatchDelete = () => {
     .btnWrap {
       display: flex;
       margin-bottom: 24px;
-      justify-content: space-between
+      // justify-content: space-between
+
+      .delete-btn {
+        margin-left: auto;
+      }
     }
 
     .table_wrapper {
