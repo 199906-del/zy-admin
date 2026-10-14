@@ -1,0 +1,128 @@
+<template>
+  <div class="menu-scrollbar" :class="{'menu-collapsed': !isMobile && settingStore.menuCollapse}">
+    <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :accordion="false" @click="emit('menuClick')">
+      <MenuItem v-for="item in menuList" :key="menuKey(item)" :menu-item="item"></MenuItem>
+    </a-menu>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, watch} from 'vue'
+import { useCommon } from '@/composables/useCommon.ts'
+import { useRoute } from 'vue-router'
+import { usePermissionStore } from '@/store/modules/permission.ts'
+import { useSettingStore } from '@/store/modules/setting.ts'
+import MenuItem from './menuItem.vue'
+
+defineOptions({
+  name: 'menu-scrollbar'
+})
+
+const emit = defineEmits<{
+  (e: 'menuClick'): void
+}>()
+
+const route = useRoute()
+const permissionStore = usePermissionStore()
+const settingStore = useSettingStore()
+const { isMobile } = useCommon()
+
+const selectedKeys = ref<string[]>([route.path])
+const openKeys = ref<string[]>([])
+const menuList = computed(() => {
+  return permissionStore.routes
+})
+
+interface MenuRoute {
+  path?: string
+  route?: string
+  id?: string | number
+  children?: MenuRoute[]
+}
+
+function menuKey(item: MenuRoute) {
+  return item.path || item.route || String(item.id)
+}
+
+// 找出当前路由所属的所有父级菜单，用于初始化展开菜单
+function findParentKeys(list: MenuRoute[], currentPath: string, parents: string[] = []): string[] {
+  for (const item of list) {
+    const key = menuKey(item)
+    const nextParents = key ? [...parents, key] : parents
+
+    if (key === currentPath) return parents
+
+    if (item.children?.length) {
+      if (item.children.some(child => menuKey(child) === currentPath)) {
+        return nextParents
+      }
+      const result = findParentKeys(item.children, currentPath, nextParents)
+      if (result.length) return result
+    }
+  }
+  return []
+}
+
+// 监听路由变化，自动高亮
+watch(
+  [() => route.path, menuList],
+  ([newPath, list]) => {
+    selectedKeys.value = [newPath]
+
+    const parentKeys = findParentKeys(list as MenuRoute[], newPath)
+
+    openKeys.value = [...new Set([...openKeys.value, ...parentKeys])]
+    // openKeys.value = findParentKeys(list as MenuRoute[], newPath)
+  },
+  { immediate: true }
+)
+
+</script>
+
+<style lang="scss" scoped>
+.menu-scrollbar {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 收起时立即隐藏所有菜单文字，css同步生效不卡顿 */
+.menu-collapsed :deep(.ant-menu-title-content) {
+  display: none !important;
+}
+
+/* 禁用菜单收缩动画 */
+:deep(.ant-menu-item),
+:deep(.ant-menu-submenu-title),
+:deep(.ant-menu-inline),
+:deep(.ant-menu) {
+  transition: none !important;
+}
+
+/* 自定义滚动条样式 */
+.menu-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.menu-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.menu-scrollbar::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 3px;
+  transition: all 0.3s;
+}
+
+.menu-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}
+
+/* Firefox 兼容 */
+.menu-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d9d9d9 transparent;
+}
+</style>

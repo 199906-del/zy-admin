@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { useIdleTimeout } from './composables/useIdleTimeout';
+
+// 6小时无操作自动登出
+useIdleTimeout()
 </script>
 
 <template>
-  <HelloWorld />
+  <router-view />
 </template>

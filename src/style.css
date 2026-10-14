@@ -52,6 +52,14 @@
 
 body {
   margin: 0;
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html {
+  height: 100%;
 }
 
 h1,
@@ -157,12 +165,13 @@ code {
 }
 
 #app {
-  width: 1126px;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
   border-inline: 1px solid var(--border);
   min-height: 100svh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -292,5 +301,30 @@ code {
   &::after {
     right: 0;
     border-right-color: var(--border);
+  }
+}
+
+.ant-divider {
+  margin: 8px 0;
+}
+
+/*移动端全局适配*/
+@media (max-width: 992px) {
+  .ant-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .ant-form-inline .ant-form-item {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .ant-modal {
+    max-width: calc(100vw - 32px) !important;
+    margin: 16px auto !important;
+  }
+
+  .ant-drawer-content-wrapper {
+    max-width: 85vw;
   }
 }
