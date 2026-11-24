@@ -26,6 +26,13 @@ pipeline {
             }
         }
 
+        stage('分支专属') {
+            when { branch 'dev' }
+            steps {
+                echo "当前分支是 ${env.BRANCH_NAME}，只有 dev 会执行这里"
+            }
+        }
+
         stage('归档产物') {
             steps {
                 archiveArtifacts artifacts: 'dist/**', fingerprint: true
